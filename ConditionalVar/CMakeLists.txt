@@ -1,0 +1,49 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 3.10)
+PROJECT(Test VERSION 1.0.0)
+SET(TARGET_NAME ${PROJECT_NAME}) #设置可执行文件的名字
+#SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
+#cmake -DCMAKE_BUILD_TYPE=Debug ..  #生成Debug和Release版本的可执行文件路径
+SET(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g -ggdb")
+SET(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wall")
+
+#set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG ${PROJECT_SOURCE_DIR}/../lib)    
+#set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${PROJECT_SOURCE_DIR}/../lib) 
+#上面两条语句分别设置了Debug版本和Release版本库文件的输出目录
+
+#指定Debug和Release版本 可执行文件的路径
+SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${PROJECT_SOURCE_DIR}/bin/Debug)
+SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${PROJECT_SOURCE_DIR}/bin/Release)
+#CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG/CMAKE_LIBRARY_OUTPUT_DIRECTORY_Release 动态库生成路径指定
+
+MESSAGE("第一次使用Message")
+#SET(SRC_DIR ./main.cpp)
+
+#INCLUDE_DIRECTORIES()    #设置头文件搜索路径
+#LINK_DIRECTORIES()   #链接动态库的路径
+#在指定目录下搜索一个库, 保存在变量MY_LIB中
+#FIND_LIBRARY(MY_LIB libmylib.a ./)
+#FIND_LIBRARY(COMM_LIB comm ../../thirdparty/comm/lib NO_DEFAULT_PATH)
+#FIND_LIBRARY(RUNTIME_LIB rt /usr/lib  /usr/local/lib NO_DEFAULT_PATH)
+#link_libraries(${COMM_LIB} ${RUNTIME_LIB})
+
+AUX_SOURCE_DIRECTORY(. SRC_LIST) #将指定路径下的cpp文件定义到变量中
+ADD_EXECUTABLE(${TARGET_NAME} ${SRC_LIST}) #PROJECT_NAME 是由PROJECT()指定
+TARGET_LINK_LIBRARIES(${TARGET_NAME} pthread)#链接动态库
+
+#下面两条语句分别设置了Debug版本和Release版本下可执行文件的后缀名（貌似这两句只能在ADD_EXECUTABLE()后面）
+set_target_properties(${TARGET_NAME} PROPERTIES DEBUG_POSTFIX "_d")     
+set_target_properties(${TARGET_NAME} PROPERTIES RELEASE_POSTFIX "_r") 
+#下面两条语句分别设置了Debug版本和Release版本下库文件的后缀名
+#set(CMAKE_DEBUG_POSTFIX "_d")   
+#set(CMAKE_RELEASE_POSTFIX "_r") 
+
+#平台判断
+IF (WIN32)
+	MESSAGE(STATUS "Now is windows")
+ELSEIF (APPLE)
+	MESSAGE(STATUS "Now is Apple systens.")
+ELSEIF (UNIX)
+	MESSAGE(STATUS "Now is UNIX-like OS's.")
+ENDIF ()
+
+

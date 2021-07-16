@@ -1,0 +1,55 @@
+{
+    "version": "2.0.0",
+    "options": {
+        "cwd": "${workspaceFolder}/build"
+    },
+    "tasks": [
+        {
+            "label": "cmake_r",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "-DCMAKE_BUILD_TYPE=Release",
+                "..",
+            ]
+        },
+        {
+            "label": "cmake_d",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "-DCMAKE_BUILD_TYPE=Debug",
+                ".."
+            ]
+        },
+        {
+            "label": "make",
+            "type": "shell",
+            "command":"make"
+        },
+        {
+            "label": "build_r",
+            "dependsOrder": "sequence",
+            "dependsOn":[
+                "cmake_r",
+                "make"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "build_d",
+            "dependsOrder": "sequence",
+            "dependsOn":[
+                "cmake_d",
+                "make"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        }
+    ]
+}
